@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RoadScan</title>
+<style>
+:root{--ink:#22262b;--muted:#646c75;--line:#d9dde1;--paper:#f6f4ef;--mark:#c9331f}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
+main{max-width:860px;margin:auto;padding:40px 16px}h1{margin:0;font-size:32px}p{color:var(--muted);margin:6px 0 24px}
+label{display:block;border:2px dashed var(--line);border-radius:8px;padding:32px;text-align:center;cursor:pointer;background:#fff}
+label:hover{border-color:var(--mark)}input{position:absolute;opacity:0;width:1px}
+#out{display:none;margin-top:24px}img{max-width:100%;display:block;border-radius:6px}
+dl{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 0}dt{font-size:13px;color:var(--muted)}dd{margin:0;font-size:22px;font-weight:650}
+#err{color:var(--mark)}@media(max-width:560px){dl{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body><main>
+<h1>RoadScan</h1>
+<p>Upload a top-down pavement photo. The model marks cracks in red and gives an indicative condition grade.</p>
+<label>Choose a JPEG, PNG or WebP image (8 MB max)<input id="f" type="file" accept="image/jpeg,image/png,image/webp"></label>
+<p id="err" role="alert"></p>
+<section id="out"><img id="i" alt="Road image with detected cracks in red">
+<dl><div><dt>Grade</dt><dd id="g"></dd></div><div><dt>Crack area</dt><dd id="c"></dd></div>
+<div><dt>Regions</dt><dd id="r"></dd></div><div><dt>Inference</dt><dd id="l"></dd></div></dl></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+$('f').addEventListener('change',async e=>{
+  const file=e.target.files[0]; if(!file) return;
+  $('err').textContent='Analysing...'; $('out').style.display='none';
+  const body=new FormData(); body.append('file',file);
+  try{
+    const res=await fetch('/v1/inspect',{method:'POST',body}); const d=await res.json();
+    if(!res.ok) throw new Error(d.detail||'Request failed');
+    $('i').src='data:image/png;base64,'+d.overlay_png_base64;
+    $('g').textContent=d.grade; $('c').textContent=d.crack_percent.toFixed(2)+'%';
+    $('r').textContent=d.regions; $('l').textContent=Math.round(d.latency_ms)+' ms';
+    $('out').style.display='block'; $('err').textContent='';
+  }catch(x){$('err').textContent=x.message}
+});
+</script>
+</body></html>
