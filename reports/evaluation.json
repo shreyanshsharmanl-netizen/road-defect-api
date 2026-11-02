@@ -1,0 +1,32 @@
+{
+  "dataset": "CrackForest",
+  "test_images": 18,
+  "image_size": "480x320",
+  "metrics": {
+    "unet_exact": {
+      "precision": 0.584,
+      "recall": 0.8144,
+      "f1": 0.6707,
+      "iou": 0.5144
+    },
+    "unet_tol2": {
+      "precision": 0.9175,
+      "recall": 0.927,
+      "f1": 0.9131,
+      "iou": 0.8553
+    },
+    "baseline_exact": {
+      "precision": 0.2817,
+      "recall": 0.3363,
+      "f1": 0.2714,
+      "iou": 0.1648
+    },
+    "baseline_tol2": {
+      "precision": 0.366,
+      "recall": 0.7503,
+      "f1": 0.4572,
+      "iou": 0.3131
+    }
+  },
+  "cpu_latency_ms_median": 157.4
+}
