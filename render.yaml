@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: roadscan
+    runtime: docker
+    plan: free
+    healthCheckPath: /readyz
