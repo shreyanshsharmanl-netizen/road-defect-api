@@ -1,8 +1,6 @@
 # RoadScan: road crack detection API
 
-![CI](https://github.com/YOUR_USERNAME/road-defect-api/actions/workflows/ci.yml/badge.svg)
-
-**[Live demo](https://YOUR_DEMO_URL)**
+![CI](https://github.com/shreyanshsharmanl-netizen/road-defect-api/actions/workflows/ci.yml/badge.svg)
 
 Upload a pavement photo and get back a crack overlay, crack area, region count and an indicative condition grade. A compact U-Net runs on CPU behind a FastAPI service.
 
